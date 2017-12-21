@@ -1,8 +1,14 @@
 {% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'music/style.css' %}" />
+<link rel="stylesheet" type="text/css" href={% static 'music/style.css' %} />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
+{% comment %} 
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script> {% endcomment %}
+
+
 {% if all_albums %}
+  <h3>Here are all my albums</h3>
   <ul>
     {% for album in all_albums %}
     <li><a href={% url 'music:detail' album.id %}>{{ album.album_title }}</a></li>
@@ -11,3 +17,4 @@
 {% else %}
   <h3>NO ALBUMS FOUND</h3>
 {% endif %}
+
