@@ -1,7 +1,8 @@
 body{
-  background: black;
+  background: brown;
 }
 
-h3{
-  font-size: 100px;
+.navbar-brand{
+  font-family: 'Molle', cursive;
+  font-size: 30px;
 }
