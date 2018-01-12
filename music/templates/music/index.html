@@ -5,12 +5,21 @@
     <div class="row">
 
       {% for album in all_albums %}
-      <div class="card m-4 p-1" style="width: 24rem;">
+      <div class="card m-4 p-1 card-width">
         <img class="card-img-top" src="{{ album.album_logo }}" alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">{{ album.album_title }}</h5>
           <p class="card-text">{{ album.artist }}</p>
           <a href={% url 'music:detail' album.id %} class="btn btn-primary">View {{album.song_set.all.count}} Songs</a>
+
+          <form action={% url 'music:album-delete' album.id %} method="post" class="album-delete-button">
+            {% csrf_token %}
+            <input type="hidden" name="album_id" value={{ album.id }}>
+            <button type="submit" class="btn">
+              <span class="fa fa-trash-alt"></span>
+            </button>
+
+          </form>
         </div>
       </div>
       {% endfor %}
