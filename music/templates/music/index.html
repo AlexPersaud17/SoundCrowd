@@ -6,7 +6,7 @@
 
       {% for album in all_albums %}
       <div class="card m-4 p-1 card-width">
-        <img class="card-img-top" src="{{ album.album_logo }}" alt="Card image cap">
+        <img class="card-img-top" src={{ album.album_logo.url }} alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">{{ album.album_title }}</h5>
           <p class="card-text">{{ album.artist }}</p>
