@@ -2,13 +2,23 @@
 
 {% block body %}
   {% if all_albums %}
-    <h3>Here are all my albums</h3>
-    <ul>
+    <div class="row">
+
       {% for album in all_albums %}
-      <li><a href={% url 'music:detail' album.id %}>{{ album.album_title }}</a></li>
+      <div class="card m-4 p-1" style="width: 24rem;">
+        <img class="card-img-top" src="{{ album.album_logo }}" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">{{ album.album_title }}</h5>
+          <p class="card-text">{{ album.artist }}</p>
+          <a href={% url 'music:detail' album.id %} class="btn btn-primary">View {{album.song_set.all.count}} Songs</a>
+        </div>
+      </div>
       {% endfor %}
-    </ul>
+      
+    </div>
+
   {% else %}
     <h3>NO ALBUMS FOUND</h3>
   {% endif %}
+
 {% endblock %}
