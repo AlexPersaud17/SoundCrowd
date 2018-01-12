@@ -6,3 +6,11 @@ body{
   font-family: 'Molle', cursive;
   font-size: 30px;
 }
+
+.album-delete-button{
+  display: inline;
+}
+
+.card-width{
+  width: 24rem;
+}
