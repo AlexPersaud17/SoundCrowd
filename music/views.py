@@ -48,3 +48,12 @@ class UserFormView(View):
       password = form.cleaned_data['password']
       user.set_password(password)
       user.save()
+
+      user = authenticate(username=username, password=password)
+
+      if user is not None:
+        if user.is_active:
+          login(request, user)
+          return redirect('music:index')
+
+    return render(request, self.template_name, {'form': form})
