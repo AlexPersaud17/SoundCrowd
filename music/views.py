@@ -8,8 +8,12 @@ from .models import Album
 from .forms import UserForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-class IndexView(LoginRequiredMixin, generic.ListView):
+class LandingView(View):
+  template_name = 'music/landing.html'
+  def get(self, request):
+    return render(request, self.template_name)
+  
+class AlbumIndex(LoginRequiredMixin, generic.ListView):
   login_url = 'login/'
   redirect_field_name = 'redirect_to'
   template_name = 'music/index.html'
@@ -41,7 +45,7 @@ class AlbumDelete(LoginRequiredMixin, DeleteView):
   login_url = 'login/'
   redirect_field_name = 'redirect_to'
   model = Album
-  success_url = reverse_lazy("music:index")
+  success_url = reverse_lazy("music:album-index")
 
 
 class LogoutView(View):
