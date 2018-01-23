@@ -128,7 +128,7 @@ body {
 header.masthead {
   text-align: center;
   color: black;
-  background-image: url("images/headphones-bg.jpeg");
+  background: linear-gradient(rgba(255, 0, 0, 0.0), rgba(255, 0, 0, 0.8)), url("images/headphones-bg.jpeg");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
