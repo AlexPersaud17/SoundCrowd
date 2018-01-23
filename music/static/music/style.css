@@ -14,3 +14,10 @@ body{
 .card-width{
   width: 24rem;
 }
+.blockbody{
+  margin-top: 75px;
+}
+
+.masthead{
+  margin-top: -75px;
+}
