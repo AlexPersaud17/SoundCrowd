@@ -16,12 +16,16 @@
       <div class="card-footer text-muted">
         <ul class="nav nav-pills">
           <li class="nav-item">
-            <a class="nav-link active" href="#">Something</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Something Else</a>
+            <a class="nav-link active" href={% url 'music:album-update' album.id %}>Edit Album Info</a>
           </li>
         </ul>
+          <form action={% url 'music:album-delete' album.id %} method="post" class="album-delete-button">
+            {% csrf_token %}
+            <input type="hidden" name="album_id" value={{ album.id }}>
+            <button type="submit" class="btn btn-warning">
+              <span class="fa fa-trash-alt"></span>
+            </button>
+          </form>
       </div>
     </div>
   </div>
@@ -33,6 +37,10 @@
   
 
   <div class="col-md">
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a class="nav-link" href={% url 'music:album-detail' album.id %}>View All</a></li>
+        <li class="nav-item"><a class="nav-link" href={% url 'music:song-add' album.id %}>Add New Song</a></li>
+      </ul>
     <div class="card mt-4 ml-3 mr-5">
       <div class="card-header">
         All Songs
@@ -42,7 +50,7 @@
           <thead>
             <tr>
               <th scope="col">Title</th>
-              <th scope="col">File Type</th>
+              <th scope="col"></th>
               <th scope="col">Favorite</th>
               <th scope="col">Action</th>
             </tr>
@@ -51,12 +59,25 @@
             {% for song in album.song_set.all %}
             <tr>
               <td>{{ song.song_title }}</td>
-              <td>{{ song.file_type}}</td>
+              <td>
+                <a target="_blank" href={{ song.audio_file.url }}>
+                    <button type="button" class="btn btn-success btn-xs">
+                        <span class="fas fa-play"></span>&nbsp; Play
+                    </button>
+                </a>
+              </td>
               <td>
                 {% if song.is_favorite %}
-                *****
-                {% endif %}</td>
-                <td><a href="#">Delete</a></td>
+                  <a href={% url 'music:favorite_song' song.id %} class="btn-favorite"><i class="fas fa-thumbs-up"></i></a>
+                {% else %}
+                  <a href={% url 'music:favorite_song' song.id %} class="btn-favorite"><i class="far fa-thumbs-up"></i></a>
+                {% endif %}
+              </td>
+              <td>
+                <button type="submit" class="btn btn-danger">
+                  <span class="fa fa-trash-alt"></span>
+                </button>
+              </td>
             </tr>
             {% endfor %}
           </tbody>
