@@ -9,83 +9,80 @@
     <!-- Template Styling -->
     <link rel="stylesheet" type="text/css" href="{% static 'music/template_style.css' %}"/>
     <!-- Font Awesome -->
-    <link href="https://use.fontawesome.com/releases/v5.0.3/css/all.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.0.3/css/all.css" rel="stylesheet"/>
     <!-- BootStrap 4 CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous"/>
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Molle:400i" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Molle:400i" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css"/>
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'/>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'/>
     <!-- My Stylesheet -->
     <link rel="stylesheet" type="text/css" href="{% static 'music/style.css' %}"/>
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'music/images/favicon.ico' %}"/>
   </head>
   <body>
 
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-        <div class="container">
-          <a class="navbar-brand" href={% url 'music:landing' %}>SoundCrowd</a>
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            Menu
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          
+      <div class="container">
+        <a class="navbar-brand" href={% url 'music:landing' %}>SoundCrowd</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+          {% if request.user.is_authenticated %}
 
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav text-uppercase ml-auto">
+            
+                  <li class="nav-item">
+                    <a class="nav-link" href={% url 'music:album-index' %}><span class="fa fa-headphones"></span> Albums</a>
+                  </li>
+            
+                  <li class="nav-item">
+                    <a class="nav-link" href={% url 'music:album-add' %}><span class="fa fa-music"></span> Songs</a>
+                  </li>
+    
+                  <!-- <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn my-2 my-sm-0 btn btn-outline-secondary" type="submit">Search</button>
+                  </form> -->
 
-              {% if request.user.is_authenticated %}
+                </ul>
 
-              <div class="collapse navbar-collapse" id="navbarResponsive">
-                  <ul class="navbar-nav text-uppercase ml-auto">
-              
-                    <li class="nav-item">
-                      <a class="nav-link" href={% url 'music:album-index' %}><span class="fa fa-headphones"></span> Albums</a>
-                    </li>
-              
-                    <li class="nav-item">
-                      <a class="nav-link" href={% url 'music:album-add' %}><span class="fa fa-music"></span> Songs</a>
-                    </li>
-      
-                    <!-- <form class="form-inline my-2 my-lg-0">
-                      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                      <button class="btn my-2 my-sm-0 btn btn-outline-secondary" type="submit">Search</button>
-                    </form> -->
+                <ul class="navbar-nav text-uppercase">
+                  <li class="nav-item">
+                    <a class="nav-link" href={% url 'music:album-add' %}><span class="fa fa-plus"></span> Add Album</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#"><span class="fa fa-sign-out-alt"></span> Logout</a>
+                  </li>
+                </ul>
+              </div>
 
-                  </ul>
-              
-                  <ul class="navbar-nav text-uppercase">
-                    <li class="nav-item">
-                      <a class="nav-link" href={% url 'music:album-add' %}><span class="fa fa-plus"></span> Add Album</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#"><span class="fa fa-sign-out-alt"></span> Logout</a>
-                    </li>
-                  </ul>
-                </div>
+          {% else %}
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+              <ul class="navbar-nav text-uppercase ml-auto">
 
-              {% else %}
-              <div class="collapse navbar-collapse" id="navbarResponsive">
-                  <ul class="navbar-nav text-uppercase ml-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'music:register' %}"><span class="fa fa-user-plus"></span> Register</a>
+                </li>
 
-                    <li class="nav-item">
-                      <a class="nav-link" href="{% url 'music:register' %}"><span class="fa fa-user-plus"></span> Register</a>
-                    </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'music:login_user' %}"><span class="fa fa-sign-in-alt"></span> Log In</a>
+                </li>
 
-                    <li class="nav-item">
-                      <a class="nav-link" href="{% url 'music:login_user' %}"><span class="fa fa-sign-in-alt"></span> Log In</a>
-                    </li>
+              </ul>
+            </div>
 
-                  </ul>
-                </div>
-
-              {% endif %}
-              
-
-
-        </div>
-      </nav>
+          {% endif %}
+      </div>
+    </nav>
 
       <div class="blockbody">
         {% block body %}
@@ -94,7 +91,7 @@
 
       <footer>
         <div class="container">
-          <span class="copyright">Source code for SoundCrowd can be viewed on <a href="#">GitHub <i class="fab fa-github"></i></a></span>
+          <span class="copyright">Source code for SoundCrowd can be viewed on <a class = "source-code" href="https://github.com/AlexPersaud17/SoundCrowd">GitHub <i class="fab fa-github"></i></a></span>
         </div>
       </footer>
 

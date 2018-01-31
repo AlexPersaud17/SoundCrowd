@@ -8,7 +8,7 @@ class Album(models.Model):
   album_logo = models.FileField()
 
   def get_absolute_url(self):
-    return reverse("music:detail", kwargs={"pk": self.pk})
+    return reverse("music:album-detail", kwargs={"pk": self.pk})
 
   def __str__(self):
     return self.album_title + " - " + self.artist

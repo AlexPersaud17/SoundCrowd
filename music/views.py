@@ -14,7 +14,7 @@ class LandingView(View):
     return render(request, self.template_name)
   
 class AlbumIndex(LoginRequiredMixin, generic.ListView):
-  login_url = 'login/'
+  login_url = '/music/login/'
   redirect_field_name = 'redirect_to'
   template_name = 'music/index.html'
   context_object_name = 'all_albums'
@@ -23,26 +23,26 @@ class AlbumIndex(LoginRequiredMixin, generic.ListView):
     return Album.objects.all()
 
 class AlbumDetail(LoginRequiredMixin, generic.DetailView):
-  login_url = 'login/'
+  login_url = '/music/login/'
   redirect_field_name = 'redirect_to'
   model = Album
   template_name = 'music/detail.html'
 
 class AlbumCreate(LoginRequiredMixin, CreateView):
-  login_url = 'login/'
+  login_url = '/music/login/'
   redirect_field_name = 'redirect_to'
   model = Album
   fields = ["artist", "album_title", "genre", "album_logo"]
 
 class AlbumUpdate(LoginRequiredMixin, UpdateView):
-  login_url = 'login/'
+  login_url = '/music/login/'
   redirect_field_name = 'redirect_to'
   model = Album
   fields = ["artist", "album_title", "genre", "album_logo"]
 
 
 class AlbumDelete(LoginRequiredMixin, DeleteView):
-  login_url = 'login/'
+  login_url = '/music/login/'
   redirect_field_name = 'redirect_to'
   model = Album
   success_url = reverse_lazy("music:album-index")

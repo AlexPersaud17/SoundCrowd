@@ -22,12 +22,44 @@ body{
   margin-top: -75px;
 }
 #services{
-  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.8)), url("images/pexels-photo-92083.jpeg");
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 195, 106, 0.8)), url("images/service-bg.jpeg");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  background-size: cover; }
+  background-size: cover; 
+}
+
+#team{
+  background: linear-gradient(rgba(255, 124, 124, 0.8), rgba(255, 255, 255, 0.0)), url("images/team-bg.jpeg")
+}
+
+.source-code{
+  color: white;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+  text-decoration: underline;
+}
+.source-code:hover{
+  color: #fed136;
+}
+.copyright{
+  color: white;
+}
+.nav-link{
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.nav-link:hover{
+  color: #fed136;
+}
+
+footer{
+  background-color: #212529;
+  margin-top: 50px;
 }
