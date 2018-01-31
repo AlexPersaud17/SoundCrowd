@@ -29,12 +29,6 @@
       </div>
     </div>
   </div>
-  
-  {% if error_message %}
-  <h1>ERROR</h1>
-  {% endif %}
-
-  
 
   <div class="col-md">
       <ul class="nav nav-pills">
@@ -44,6 +38,9 @@
     <div class="card mt-4 ml-3 mr-5">
       <div class="card-header">
         Add A New Song
+        {% if error_message %}
+        <p>{{ error_message }}</p>
+        {% endif %}
       </div>
       <div class="card-body">
         <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">

@@ -1,12 +1,17 @@
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect, get_object_or_404
+from .forms import SongForm, UserForm
+from .models import Album, Song
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views import generic
-from django.views.generic import View
-from .models import Album
-from .forms import UserForm
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import View
+from django.http import JsonResponse
+
+
+AUDIO_FILE_TYPES = ['wav', 'mp3', 'ogg']
+IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
 class LandingView(View):
   template_name = 'music/landing.html'
@@ -103,3 +108,54 @@ class RegisterView(View):
           return render(request, 'music/index.html')          
 
     return render(request, self.template_name, {'form': form})
+
+
+
+def create_song(request, album_id):
+	form = SongForm(request.POST or None, request.FILES or None)
+	album = get_object_or_404(Album, pk=album_id)
+
+	if form.is_valid():
+		albums_songs = album.song_set.all()
+		for s in albums_songs:
+			if s.song_title == form.cleaned_data.get("song_title"):
+				context = {
+					'album': album,
+					'form': form,
+					'error_message': 'You already added that song',
+				}
+				return render(request, 'music/create_song.html', context)
+
+		song = form.save(commit=False)
+		song.album = album
+		song.audio_file = request.FILES['audio_file']
+		file_type = song.audio_file.url.split('.')[-1]
+		file_type = file_type.lower()
+		if file_type not in AUDIO_FILE_TYPES:
+			context = {
+				'album': album,
+				'form': form,
+				'error_message': 'Audio file must be WAV, MP3, or OGG',
+			}
+			return render(request, 'music/create_song.html', context)
+
+		song.save()
+		return render(request, 'music/detail.html', {'album': album})
+	context = {
+		'album': album,
+		'form': form,
+	}
+	return render(request, 'music/create_song.html', context)
+
+def favorite_song(request, song_id):
+  song = get_object_or_404(Song, pk=song_id)
+  try:
+    if song.is_favorite:
+      song.is_favorite = False
+    else:
+      song.is_favorite = True
+    song.save()
+  except (KeyError, Song.DoesNotExist):
+    return JsonResponse({'success': False})
+  else:
+    return render(request, 'music/detail.html', {'album': song.album})
