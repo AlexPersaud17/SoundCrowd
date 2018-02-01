@@ -15,7 +15,7 @@
           <p><strong>{{ error_message }}</strong></p>
         {% endif %}
 
-        <form class="form-horizontal" action={% url 'music:login_user'%} method="post" enctype="multipart/form-data">
+        <form class="form-horizontal" action={% url 'music:login-user'%} method="post" enctype="multipart/form-data">
           {% csrf_token %}
 
           <div class="form-group row">

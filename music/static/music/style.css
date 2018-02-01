@@ -23,6 +23,7 @@ body{
 }
 .card{
   margin-bottom: 50px;
+  margin-top: 10px;
 }
 #services{
   background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 195, 106, 0.8)), url("images/service-bg.jpeg");
@@ -64,4 +65,10 @@ body{
 
 footer{
   background-color: #212529;
+}
+
+.song-list-mini{
+  width: 20px; 
+  float: left; 
+  margin-right: 10px;
 }

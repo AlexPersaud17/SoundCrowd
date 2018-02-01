@@ -1,4 +1,6 @@
 {% extends 'music/base.html' %}
+{% block title %}{{ filter_by.capitalize }} Songs{% endblock %}
+
 {% block body %}
 
 <div class='songs-container container-fluid'>
@@ -43,32 +45,75 @@
               </tr>
             </thead>
             <tbody>
-            {% for song in song_list %}
-              <tr>
-                <td>{{ song.song_title }}</td>
-                <td>{{ song.album.artist }}</td>
-                <td>
-                  <a target="_blank" href="{{ song.audio_file.url }}">
-                    <button type="button" class="btn btn-success btn-xs">
-                      <span class="fas fa-play"></span>&nbsp; Play
-                    </button>
-                  </a>
-                </td>
-                <td>
-                  <a href={% url 'music:album-detail' song.album.id %}>
-                    <img src={{ song.album.album_logo.url }} class="img-responsive" style="width: 20px; float: left; margin-right: 10px;" />
-                  </a>
-                  <a href={% url 'music:album-detail' song.album.id %}>{{ song.album.album_title }}</a>
-                </td>
-                <td>
-                  {% if song.is_favorite %}
+
+
+
+
+
+            {% if filter_by == 'favorite' %}
+              {% for song in song_list %}
+                {% if song.is_favorite %}
+                  <tr>
+                    <td>{{ song.song_title }}</td>                
+                    <td>{{ song.album.artist }}</td>
+                    <td>
+                      <a target="_blank" href="{{ song.audio_file.url }}">
+                        <button type="button" class="btn btn-success btn-xs">
+                          <span class="fas fa-play"></span>&nbsp; Play {{ song.is_favorite }}
+                        </button>
+                      </a>
+                    </td>
+                    <td>
+                      <a href={% url 'music:album-detail' song.album.id %}>
+                        <img src={{ song.album.album_logo.url }} class="img-responsive song-list-mini"/>
+                      </a>
+                      <a href={% url 'music:album-detail' song.album.id %}>{{ song.album.album_title }}</a>
+                    </td>
+                    <td>
+                      {% if song.is_favorite %}
+                      <a href={% url 'music:favorite-song' song.id %} class="btn-favorite"><i class="fas fa-thumbs-up"></i></a>
+                      {% else %}
+                      <a href={% url 'music:favorite-song' song.id %} class="btn-favorite"><i class="far fa-thumbs-up"></i></a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+                  
+
+                  
+            {% else %}
+              {% for song in song_list %}
+                <tr>
+                  <td>{{ song.song_title }}</td>
+                  <td>{{ song.album.artist }}</td>
+                  <td>
+                    <a target="_blank" href="{{ song.audio_file.url }}">
+                      <button type="button" class="btn btn-success btn-xs">
+                        <span class="fas fa-play"></span>&nbsp; Play
+                      </button>
+                    </a>
+                  </td>
+                  <td>
+                    <a href={% url 'music:album-detail' song.album.id %}>
+                      <img src={{ song.album.album_logo.url }} class="img-responsive song-list-mini"/>
+                    </a>
+                    <a href={% url 'music:album-detail' song.album.id %}>{{ song.album.album_title }}</a>
+                  </td>
+                  <td>
+                    {% if song.is_favorite %}
                     <a href={% url 'music:favorite-song' song.id %} class="btn-favorite"><i class="fas fa-thumbs-up"></i></a>
-                  {% else %}
+                    {% else %}
                     <a href={% url 'music:favorite-song' song.id %} class="btn-favorite"><i class="far fa-thumbs-up"></i></a>
-                  {% endif %}
-                </td>
-              </tr>
-            {% endfor %}
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            {% endif %}
+
+
+
+
             </tbody>
           </table>
         </div>

@@ -6,7 +6,8 @@ app_name = 'music'
 urlpatterns = [
     path('', views.LandingView.as_view(), name="landing"),
     path('register/', views.RegisterView.as_view(), name="register"),
-    path('login/', views.LoginView.as_view(), name="login_user"),
+    path('login/', views.LoginView.as_view(), name="login-user"),
+    path('logout/', views.LogoutView.as_view(), name="logout-user"),
 
     path('album/all/', views.AlbumIndex.as_view(), name="album-index"),
     path('album/<int:pk>/', views.AlbumDetail.as_view(), name="album-detail"),

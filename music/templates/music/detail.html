@@ -1,6 +1,6 @@
 {% extends 'music/base.html' %}
 
-{% block title %}SoundCrowd | "{{ album.album_title }}"{% endblock %}
+{% block title %}"{{ album.album_title }}"{% endblock %}
 
 {% block body %}
 
@@ -57,7 +57,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for song in album.song_set.all %}
+            {% for song in album.song_set.all|dictsort:"song_title" %}
             <tr>
               <td>{{ song.song_title }}</td>
               <td>

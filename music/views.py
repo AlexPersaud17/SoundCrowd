@@ -32,6 +32,7 @@ class AlbumDetail(LoginRequiredMixin, generic.DetailView):
   redirect_field_name = 'redirect_to'
   model = Album
   template_name = 'music/detail.html'
+  
 
 class AlbumCreate(LoginRequiredMixin, CreateView):
   login_url = '/music/login/'
@@ -57,7 +58,7 @@ class LogoutView(View):
   def get(self, request):
     logout(request)
     form = UserForm(request.POST or None)
-    return render(request, 'music/login.html', {"form": form})
+    return redirect('music:landing')
 
 
 class LoginView(View):
@@ -73,10 +74,10 @@ class LoginView(View):
         login(request, user)
         # albums = Album.objects.filter(user=request.user)
         # return render(request, 'music/index.html', {'albums': albums})
-        return render(request, 'music/index.html')
+        return redirect('music:album-index')
 
       else:
-        return render(request, 'music/login_form.html', {'error_message': 'Your account has been disabled'})
+        return render(request, 'music/login_form.html', {'error_message': 'Your account has been disabled.'})
     else:
       return render(request, 'music/login_form.html', {'error_message': 'Invalid login'})
 
@@ -158,7 +159,7 @@ def favorite_song(request, song_id):
   except (KeyError, Song.DoesNotExist):
     return JsonResponse({'success': False})
   else:
-    return render(request, 'music/detail.html', {'album': song.album})
+    return redirect(song.album)
 
 # def songs(request, filter_by):
 #   if not request.user.is_authenticated():
@@ -188,7 +189,7 @@ class SongIndex(LoginRequiredMixin, generic.ListView):
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
-    context['song_list'] = Song.objects.all()
+    context['song_list'] = Song.objects.order_by("album")
     context['filter_by'] = self.kwargs['filter_by']
     return context
 
