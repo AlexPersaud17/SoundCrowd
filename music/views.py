@@ -159,3 +159,32 @@ def favorite_song(request, song_id):
     return JsonResponse({'success': False})
   else:
     return render(request, 'music/detail.html', {'album': song.album})
+
+# def songs(request, filter_by):
+#   if not request.user.is_authenticated():
+#     return render(request, 'music/login.html')
+#   else:
+#     try:
+#       song_ids = []
+#       for album in Album.objects.filter(user=request.user):
+#         for song in album.song_set.all():
+#           song_ids.append(song.pk)
+#           users_songs = Song.objects.filter(pk__in=song_ids)
+#       if filter_by == 'favorites':
+#         users_songs = users_songs.filter(is_favorite=True)
+#     except Album.DoesNotExist:
+#       users_songs = []
+#     return render(request, 'music/songs.html', {
+#       'song_list': users_songs,
+# 			'filter_by': filter_by,
+# 		})
+
+
+class SongIndex(LoginRequiredMixin, generic.ListView):
+  login_url = '/music/login/'
+  redirect_field_name = 'redirect_to'
+  template_name = 'music/songs.html'
+  context_object_name = 'song_list'
+
+  def get_queryset(self):
+    return Song.objects.all()

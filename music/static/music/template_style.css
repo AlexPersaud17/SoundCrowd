@@ -120,7 +120,8 @@ body {
     #mainNav.navbar-shrink {
       padding-top: 0;
       padding-bottom: 0;
-      background-color: #212529; }
+      background-color: #212529; 
+      opacity: 0.8;}
       #mainNav.navbar-shrink .navbar-brand {
         font-size: 30px;
         padding: 12px 0; } }

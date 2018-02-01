@@ -38,14 +38,14 @@
           {% if request.user.is_authenticated %}
 
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav text-uppercase ml-auto">
+                <ul class="navbar-nav text-uppercase mr-auto">
             
                   <li class="nav-item">
                     <a class="nav-link" href={% url 'music:album-index' %}><span class="fa fa-headphones"></span> Albums</a>
                   </li>
             
                   <li class="nav-item">
-                    <a class="nav-link" href={% url 'music:album-add' %}><span class="fa fa-music"></span> Songs</a>
+                    <a class="nav-link" href={% url 'music:song-index' 'all' %}><span class="fa fa-music"></span> Songs</a>
                   </li>
     
                   <!-- <form class="form-inline my-2 my-lg-0">
