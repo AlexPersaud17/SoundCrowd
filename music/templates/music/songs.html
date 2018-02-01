@@ -4,15 +4,15 @@
 <div class='songs-container container-fluid'>
   <div class="row">
     <div class="col-sm-12">
-      <div class="panel panel-default">
-        <div class="panel-body">
+      <div class="card card-default">
+        <div class="card-body">
           <table class="table">
             <thead>
               <tr>
                 <th>Song Title</th>
                 <th>Artist</th>
+                <th></th>
                 <th>Album</th>
-                <th>Audio File</th>
                 <th>Favorite</th>
               </tr>
             </thead>
@@ -24,18 +24,22 @@
                 <td>
                   <a target="_blank" href="{{ song.audio_file.url }}">
                     <button type="button" class="btn btn-success btn-xs">
-                      <span class="glyphicon glyphicon-play"></span>&nbsp; Play
+                      <span class="fas fa-play"></span>&nbsp; Play
                     </button>
                   </a>
                 </td>
                 <td>
-                  <a href="{% url 'music:album-detail' song.album.id %}">
-                    <img src="{{ song.album.album_logo.url }}" class="img-responsive" style="width: 20px; float: left; margin-right: 10px;" />
+                  <a href={% url 'music:album-detail' song.album.id %}>
+                    <img src={{ song.album.album_logo.url }} class="img-responsive" style="width: 20px; float: left; margin-right: 10px;" />
                   </a>
-                  <a href="{% url 'music:album-detail' song.album.id %}">{{ song.album.album_title }}</a>
+                  <a href={% url 'music:album-detail' song.album.id %}>{{ song.album.album_title }}</a>
                 </td>
                 <td>
-                  <a href="{% url 'music:favorite-song' song.id %}" class="btn-favorite"><span class="glyphicon glyphicon-star {% if song.is_favorite %}active{% endif %}"></span></a>
+                  {% if song.is_favorite %}
+                    <a href={% url 'music:favorite-song' song.id %} class="btn-favorite"><i class="fas fa-thumbs-up"></i></a>
+                  {% else %}
+                    <a href={% url 'music:favorite-song' song.id %} class="btn-favorite"><i class="far fa-thumbs-up"></i></a>
+                  {% endif %}
                 </td>
               </tr>
             {% endfor %}
