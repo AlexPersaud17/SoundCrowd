@@ -75,9 +75,13 @@
                 {% endif %}
               </td>
               <td>
-                <button type="submit" class="btn btn-danger">
-                  <span class="fa fa-trash-alt"></span>
-                </button>
+                <form action={% url 'music:song-delete' song.id %} method="post" class="song-delete-button">
+                  {% csrf_token %}
+                  <input type="hidden" name="album_id" value={{ song.id }}>
+                  <button type="submit" class="btn">
+                    <span class="fa fa-trash-alt"></span>
+                  </button>
+                </form>
               </td>
             </tr>
             {% endfor %}

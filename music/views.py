@@ -181,10 +181,20 @@ def favorite_song(request, song_id):
 
 
 class SongIndex(LoginRequiredMixin, generic.ListView):
+  model = Song
   login_url = '/music/login/'
   redirect_field_name = 'redirect_to'
   template_name = 'music/songs.html'
-  context_object_name = 'song_list'
 
-  def get_queryset(self):
-    return Song.objects.all()
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['song_list'] = Song.objects.all()
+    context['filter_by'] = self.kwargs['filter_by']
+    return context
+
+
+class SongDelete(LoginRequiredMixin, DeleteView):
+  login_url = '/music/login/'
+  redirect_field_name = 'redirect_to'
+  model = Song
+  success_url = reverse_lazy("music:song-index", kwargs={'filter_by': 'all'})

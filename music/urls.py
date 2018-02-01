@@ -17,6 +17,7 @@ urlpatterns = [
     path('album/<int:album_id>/add_song/', views.create_song, name="song-add" ),
     path('<int:song_id>/favorite/', views.favorite_song, name="favorite-song" ),
     path('songs/<filter_by>/', views.SongIndex.as_view(), name='song-index'),
+    path('songs/<int:pk>/delete/', views.SongDelete.as_view(), name='song-delete'),
 
 
 ]
