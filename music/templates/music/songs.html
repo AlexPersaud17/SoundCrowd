@@ -1,0 +1,125 @@
+{% extends 'music/base.html' %}
+{% block title %}{{ filter_by.capitalize }} Songs{% endblock %}
+
+{% block body %}
+
+<div class='songs-container container-fluid'>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a
+          {% if filter_by == 'all' %}
+          class="nav-link btn btn-primary active"
+          {% else %}
+          class="nav-link"
+          {% endif %}
+          href={% url 'music:song-index' 'all' %}>View All</a></li>
+
+        <li class="nav-item">
+          <a 
+          {% if filter_by == 'favorite' %}
+          class="nav-link btn btn-primary active"
+          {% else %}
+          class="nav-link"
+          {% endif %}
+          href={% url 'music:song-index' 'favorite' %}>View Favorites</a></li>
+
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card card-default">
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Song Title</th>
+                <th>Artist</th>
+                <th></th>
+                <th>Album</th>
+                <th>Favorite</th>
+              </tr>
+            </thead>
+            <tbody>
+
+
+
+
+
+            {% if filter_by == 'favorite' %}
+              {% for song in song_list %}
+                {% if song.is_favorite %}
+                  <tr>
+                    <td>{{ song.song_title }}</td>                
+                    <td>{{ song.album.artist }}</td>
+                    <td>
+                      <a target="_blank" href="{{ song.audio_file.url }}">
+                        <button type="button" class="btn btn-success btn-xs">
+                          <span class="fas fa-play"></span>&nbsp; Play {{ song.is_favorite }}
+                        </button>
+                      </a>
+                    </td>
+                    <td>
+                      <a href={% url 'music:album-detail' song.album.id %}>
+                        <img src={{ song.album.album_logo.url }} class="img-responsive song-list-mini"/>
+                      </a>
+                      <a href={% url 'music:album-detail' song.album.id %}>{{ song.album.album_title }}</a>
+                    </td>
+                    <td>
+                      {% if song.is_favorite %}
+                      <a href={% url 'music:favorite-song' song.id %} class="btn-favorite"><i class="fas fa-thumbs-up"></i></a>
+                      {% else %}
+                      <a href={% url 'music:favorite-song' song.id %} class="btn-favorite"><i class="far fa-thumbs-up"></i></a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+                  
+
+                  
+            {% else %}
+              {% for song in song_list %}
+                <tr>
+                  <td>{{ song.song_title }}</td>
+                  <td>{{ song.album.artist }}</td>
+                  <td>
+                    <a target="_blank" href="{{ song.audio_file.url }}">
+                      <button type="button" class="btn btn-success btn-xs">
+                        <span class="fas fa-play"></span>&nbsp; Play
+                      </button>
+                    </a>
+                  </td>
+                  <td>
+                    <a href={% url 'music:album-detail' song.album.id %}>
+                      <img src={{ song.album.album_logo.url }} class="img-responsive song-list-mini"/>
+                    </a>
+                    <a href={% url 'music:album-detail' song.album.id %}>{{ song.album.album_title }}</a>
+                  </td>
+                  <td>
+                    {% if song.is_favorite %}
+                    <a href={% url 'music:favorite-song' song.id %} class="btn-favorite"><i class="fas fa-thumbs-up"></i></a>
+                    {% else %}
+                    <a href={% url 'music:favorite-song' song.id %} class="btn-favorite"><i class="far fa-thumbs-up"></i></a>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            {% endif %}
+
+
+
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+{% endblock %}

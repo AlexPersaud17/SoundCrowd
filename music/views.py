@@ -25,13 +25,14 @@ class AlbumIndex(LoginRequiredMixin, generic.ListView):
   context_object_name = 'all_albums'
 
   def get_queryset(self):
-    return Album.objects.all()
+    return Album.objects.filter(user = self.request.user)
 
 class AlbumDetail(LoginRequiredMixin, generic.DetailView):
   login_url = '/music/login/'
   redirect_field_name = 'redirect_to'
   model = Album
   template_name = 'music/detail.html'
+  
 
 class AlbumCreate(LoginRequiredMixin, CreateView):
   login_url = '/music/login/'
@@ -57,7 +58,7 @@ class LogoutView(View):
   def get(self, request):
     logout(request)
     form = UserForm(request.POST or None)
-    return render(request, 'music/login.html', {"form": form})
+    return redirect('music:landing')
 
 
 class LoginView(View):
@@ -71,12 +72,10 @@ class LoginView(View):
     if user is not None:
       if user.is_active:
         login(request, user)
-        # albums = Album.objects.filter(user=request.user)
-        # return render(request, 'music/index.html', {'albums': albums})
-        return render(request, 'music/index.html')
+        return redirect('music:album-index')
 
       else:
-        return render(request, 'music/login_form.html', {'error_message': 'Your account has been disabled'})
+        return render(request, 'music/login_form.html', {'error_message': 'Your account has been disabled.'})
     else:
       return render(request, 'music/login_form.html', {'error_message': 'Invalid login'})
 
@@ -103,49 +102,97 @@ class RegisterView(View):
       if user is not None:
         if user.is_active:
           login(request, user)
-          # albums = Album.objects.filter(user=request.user)
+          albums = Album.objects.filter(user = self.request.user)
           # return render(request, 'music/index.html', {'albums': albums})
-          return render(request, 'music/index.html')          
+          return redirect('music:album-index')   
 
     return render(request, self.template_name, {'form': form})
 
 
+class SongCreate(LoginRequiredMixin, CreateView):
+  model = Song
+  form_class = SongForm
+  login_url = '/music/login/'
+  redirect_field_name = 'redirect_to'
 
-def create_song(request, album_id):
-	form = SongForm(request.POST or None, request.FILES or None)
-	album = get_object_or_404(Album, pk=album_id)
 
-	if form.is_valid():
-		albums_songs = album.song_set.all()
-		for s in albums_songs:
-			if s.song_title == form.cleaned_data.get("song_title"):
-				context = {
-					'album': album,
-					'form': form,
-					'error_message': 'You already added that song',
-				}
-				return render(request, 'music/create_song.html', context)
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['album'] = Album.objects.get(pk=self.kwargs['album_id'])
+    return context
 
-		song = form.save(commit=False)
-		song.album = album
-		song.audio_file = request.FILES['audio_file']
-		file_type = song.audio_file.url.split('.')[-1]
-		file_type = file_type.lower()
-		if file_type not in AUDIO_FILE_TYPES:
-			context = {
-				'album': album,
-				'form': form,
-				'error_message': 'Audio file must be WAV, MP3, or OGG',
-			}
-			return render(request, 'music/create_song.html', context)
+  def post(self, request, **kwargs):
+    form = self.form_class(request.POST or None, request.FILES or None)
+    album = Album.objects.get(pk=self.kwargs['album_id'])
+    if form.is_valid():
+      albums_songs = album.song_set.all()
+      for s in albums_songs:
+        if s.song_title == form.cleaned_data.get("song_title"):
+          context = {
+            'album': album,
+            'form': form,
+            'error_message': 'You already added that song',
+          }
+          return render(request, 'music/song_form.html', context)
 
-		song.save()
-		return render(request, 'music/detail.html', {'album': album})
-	context = {
-		'album': album,
-		'form': form,
-	}
-	return render(request, 'music/create_song.html', context)
+      song = form.save(commit=False)
+      song.album = album
+      song.audio_file = request.FILES['audio_file']
+
+      file_type = song.audio_file.url.split('.')[-1]
+      file_type = file_type.lower()
+      if file_type not in AUDIO_FILE_TYPES:
+        context = {
+          'album': album,
+          'form': form,
+          'error_message': 'Audio file must be WAV, MP3, or OGG',
+        }
+        return render(request, 'music/song_form.html', context)
+
+      song.save()
+      return redirect(song.album)
+    context = {
+      'album': album,
+      'form': form,
+    }
+    return render(request, 'music/song_form.html', context)
+
+
+# def create_song(request, album_id):
+# 	form = SongForm(request.POST or None, request.FILES or None)
+# 	album = get_object_or_404(Album, pk=album_id)
+
+# 	if form.is_valid():
+# 		albums_songs = album.song_set.all()
+# 		for s in albums_songs:
+# 			if s.song_title == form.cleaned_data.get("song_title"):
+# 				context = {
+# 					'album': album,
+# 					'form': form,
+# 					'error_message': 'You already added that song',
+# 				}
+# 				return render(request, 'music/create_song.html', context)
+
+# 		song = form.save(commit=False)
+# 		song.album = album
+# 		song.audio_file = request.FILES['audio_file']
+# 		file_type = song.audio_file.url.split('.')[-1]
+# 		file_type = file_type.lower()
+# 		if file_type not in AUDIO_FILE_TYPES:
+# 			context = {
+# 				'album': album,
+# 				'form': form,
+# 				'error_message': 'Audio file must be WAV, MP3, or OGG',
+# 			}
+# 			return render(request, 'music/create_song.html', context)
+
+# 		song.save()
+# 		return render(request, 'music/detail.html', {'album': album})
+# 	context = {
+# 		'album': album,
+# 		'form': form,
+# 	}
+# 	return render(request, 'music/create_song.html', context)
 
 def favorite_song(request, song_id):
   song = get_object_or_404(Song, pk=song_id)
@@ -158,4 +205,45 @@ def favorite_song(request, song_id):
   except (KeyError, Song.DoesNotExist):
     return JsonResponse({'success': False})
   else:
-    return render(request, 'music/detail.html', {'album': song.album})
+    return redirect(song.album)
+
+# def songs(request, filter_by):
+#   if not request.user.is_authenticated():
+#     return render(request, 'music/login.html')
+#   else:
+#     try:
+#       song_ids = []
+#       for album in Album.objects.filter(user=request.user):
+#         for song in album.song_set.all():
+#           song_ids.append(song.pk)
+#           users_songs = Song.objects.filter(pk__in=song_ids)
+#       if filter_by == 'favorites':
+#         users_songs = users_songs.filter(is_favorite=True)
+#     except Album.DoesNotExist:
+#       users_songs = []
+#     return render(request, 'music/songs.html', {
+#       'song_list': users_songs,
+# 			'filter_by': filter_by,
+# 		})
+
+
+class SongIndex(LoginRequiredMixin, generic.ListView):
+  model = Song
+  login_url = '/music/login/'
+  redirect_field_name = 'redirect_to'
+  template_name = 'music/songs.html'
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['song_list'] = Song.objects.filter(user = self.request.user)
+    context['filter_by'] = self.kwargs['filter_by']
+    return context
+
+  # def get_queryset(self):
+  #   Song.objects.filter(album = Album.objects.filter(user = User.objects.get(id=1)))
+
+class SongDelete(LoginRequiredMixin, DeleteView):
+  login_url = '/music/login/'
+  redirect_field_name = 'redirect_to'
+  model = Song
+  success_url = reverse_lazy("music:song-index", kwargs={'filter_by': 'all'})
