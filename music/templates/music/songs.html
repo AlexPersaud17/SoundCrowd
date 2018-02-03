@@ -46,11 +46,24 @@
             </thead>
             <tbody>
 
+            {% if not song_list %}
+            <tr>
+              <td>No Songs Yet!</td>
+              <td>{{ request.user }}</td>
+              <td></td>
+              <td>
+                <a href={% url 'music:album-add' %}>
+                  <button type="button" class="btn btn-success btn-xs">
+                    <span class="fas fa-plus"></span>&nbsp; Add Album
+                  </button>
+                </a>
+              </td>
+              <td>
+                <a href="#" class="btn-favorite"><i class="fas fa-thumbs-up"></i></a>
+              </td>
+            </tr>
 
-
-
-
-            {% if filter_by == 'favorite' %}
+            {% elif filter_by == 'favorite' %}
               {% for song in song_list %}
                 {% if song.is_favorite %}
                   <tr>
@@ -79,20 +92,22 @@
                   </tr>
                 {% endif %}
               {% endfor %}
-                  
-
-                  
+              
             {% else %}
               {% for song in song_list %}
                 <tr>
                   <td>{{ song.song_title }}</td>
                   <td>{{ song.album.artist }}</td>
                   <td>
-                    <a target="_blank" href="{{ song.audio_file.url }}">
+                    <!-- <a target="_blank" href="{{ song.audio_file.url }}">
                       <button type="button" class="btn btn-success btn-xs">
                         <span class="fas fa-play"></span>&nbsp; Play
                       </button>
-                    </a>
+                    </a> -->
+
+                    <audio controls>
+                      <source src={{ song.audio_file.url }}>
+                    </audio>
                   </td>
                   <td>
                     <a href={% url 'music:album-detail' song.album.id %}>
@@ -110,9 +125,6 @@
                 </tr>
               {% endfor %}
             {% endif %}
-
-
-
 
             </tbody>
           </table>

@@ -9,6 +9,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View
 from django.http import JsonResponse
 
+import logging
+logger = logging.getLogger(__name__)
+# logger.error()
+
+
 
 AUDIO_FILE_TYPES = ['wav', 'mp3', 'ogg']
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
@@ -33,12 +38,14 @@ class AlbumDetail(LoginRequiredMixin, generic.DetailView):
   model = Album
   template_name = 'music/detail.html'
   
+  
 
 class AlbumCreate(LoginRequiredMixin, CreateView):
   login_url = '/music/login/'
   redirect_field_name = 'redirect_to'
   model = Album
   fields = ["artist", "album_title", "genre", "album_logo"]
+
 
 class AlbumUpdate(LoginRequiredMixin, UpdateView):
   login_url = '/music/login/'
