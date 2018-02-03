@@ -57,15 +57,28 @@
             </tr>
           </thead>
           <tbody>
+            {% if not album.song_set.all %}
+            <tr>
+              <td>No Songs Yet!</td>
+              <td></td>
+              <td><a href="#" class="btn-favorite"><i class="fas fa-thumbs-up"></i></a></td>
+              <td>
+                <a href={% url 'music:song-add' album.id %}>
+                  <button type="button" class="btn btn-success btn-xs">
+                    <span class="fas fa-plus"></span> Add Song
+                  </button>
+                </a>
+              </td>
+              <td></td>
+            </tr>
+            {% else %}
             {% for song in album.song_set.all|dictsort:"song_title" %}
             <tr>
               <td>{{ song.song_title }}</td>
               <td>
-                <a target="_blank" href={{ song.audio_file.url }}>
-                    <button type="button" class="btn btn-success btn-xs">
-                        <span class="fas fa-play"></span>&nbsp; Play
-                    </button>
-                </a>
+                <audio controls>
+                  <source src={{ song.audio_file.url }}>
+                </audio>
               </td>
               <td>
                 {% if song.is_favorite %}
@@ -85,6 +98,7 @@
               </td>
             </tr>
             {% endfor %}
+            {% endif %}
           </tbody>
         </table>
       </div>
