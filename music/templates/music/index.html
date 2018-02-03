@@ -28,7 +28,17 @@
     </div>
 
   {% else %}
-    <h3>NO ALBUMS FOUND</h3>
+    <div class="row">
+      <div class="card m-4 p-1 card-width">
+        <img class="card-img-top" src=https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">You Haven't Added Any Songs Yet!</h5>
+          <p class="card-text">{{ request.user}}</p>
+          <a href={% url 'music:album-add' %} class="btn btn-primary">Click Here To Add A New Album</a>
+
+        </div>
+      </div>
+    </div>
   {% endif %}
 
 {% endblock %}

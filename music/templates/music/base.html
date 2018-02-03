@@ -45,14 +45,13 @@
                   </li>
             
                   <li class="nav-item">
-                    <a class="nav-link" href={% url 'music:song-index' 'all' %}><span class="fa fa-music"></span> Songs</a>
+                    <a class="nav-link" href={% url 'music:song-index' 'all' %}><span class="fa fa-music"></span> Songs{{ request.user }}</a>
                   </li>
     
                   <!-- <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn my-2 my-sm-0 btn btn-outline-secondary" type="submit">Search</button>
                   </form> -->
-
                 </ul>
 
                 <ul class="navbar-nav text-uppercase">
